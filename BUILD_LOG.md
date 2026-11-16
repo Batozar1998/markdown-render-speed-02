@@ -125,3 +125,29 @@ identical by construction where a fast path bails, faster where it engages:
 - `main.ts` was rewritten in the agent's own structure (the first version was
   verbatim the kit baseline's driver; the rules require at least one line the
   agent wrote).
+
+## Second recorded re-authoring (2026-11-16, recording 01a1e4a0-1257-77c6-bc25-d16eb78572ca)
+
+The first recording (01a1e48b) re-authored only the four code files; the
+recording's start warnings flag six counted files as pre-existing, and
+`transcripts_witnessed` fails an entry with a counted file the recorded
+agent wrote no line of. So this session, started under a fresh recording,
+re-authored ALL SIX counted files with the file tools, byte-identical to
+their prior content: `parse.js`, `fastblock.js`, `fastinline.js`, `main.ts`,
+`README.md`, and this `BUILD_LOG.md` (plus this entry). `vendor/marked/*`,
+`LICENSE`, `.makefun/owner.json` untouched.
+
+Verification in this session (same VM, Node v24.22.1):
+
+- Official `grade-local --driver process` (commit 4b66244):
+  **scores {"cases_passed":720,"cases_total":720,"passed":1}**, L1 regrade
+  reproduced byte for byte. Eligibility still `no_transcripts,
+  coverage_below_gate, cost_unpriced` — grade-local runs without transcripts;
+  the sealed recording supplies them at submit.
+- Speed, CPU time, alternating rounds (9 rounds, median): **1.18x faster
+  than marked on the docs** (entry 616.1 ms vs marked 725.2 ms per run),
+  **1.53x on the spec cases** (9.8 ms vs 15.1 ms). Same direction as the
+  first build's 1.21x / 1.57x; the docs margin moves with shared-VM noise.
+- `node --check` clean on all three JS files; `git diff` confirms the five
+  other re-authored files are byte-identical to HEAD (only this log's new
+  section differs, committed here).
